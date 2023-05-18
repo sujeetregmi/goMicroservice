@@ -2,13 +2,9 @@ package database
 
 import (
 	"errors"
-	"fmt"
-	"log"
-	"os"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"github.com/joho/godotenv"
 )
 
 var db *gorm.DB
@@ -21,27 +17,11 @@ type Article struct {
 	Rate        int    `json:"rate"`
 }
 
-func GetEnvVariable(key string) string {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal("Error loading .env file", err)
-	}
-	return os.Getenv(key)
-}
-
 func NewPostgreSQLClient() {
-	var (
-		host     = GetEnvVariable("DB_HOST")
-		port     = GetEnvVariable("DB_PORT")
-		user     = GetEnvVariable("DB_USER")
-		dbname   = GetEnvVariable("DB_NAME")
-		password = GetEnvVariable("DB_PASSWORD")
-	)
 
-	conn := fmt.Sprintf("host=%s, port=%s, user=%s, dbname=%s, password=%s, slmode=disable", host, port, user, dbname, password)
-
-	db, err := gorm.Open("postgres", conn)
+	db, err := gorm.Open("postgres", "host=127.0.0.1 port=5432 user=regmi dbname=myarticles password=sainamaina sslmode=disable")
 	//testing database connection
+	// err = db.DB().Ping()
 	if err != nil {
 		panic(err)
 	}
